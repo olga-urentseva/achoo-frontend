@@ -1,0 +1,79 @@
+.worldmap {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.land {
+  fill: oklch(0.9 0.012 245);
+  stroke: oklch(0.86 0.012 245);
+  stroke-width: 0.15;
+}
+
+/* Status sets the group color; the dots inherit it via currentColor. */
+.green {
+  color: var(--status-green);
+}
+.yellow {
+  color: var(--status-yellow);
+}
+.red {
+  color: var(--status-red);
+}
+.purple {
+  color: var(--status-purple);
+}
+
+.dot {
+  fill: currentColor;
+  stroke: var(--card);
+  stroke-width: 0.3;
+}
+
+.pulse {
+  fill: currentColor;
+  opacity: 0.35;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 2.4s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
+}
+
+.caption {
+  margin-top: 0.625rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.count {
+  font-weight: 700;
+  color: var(--ink);
+}

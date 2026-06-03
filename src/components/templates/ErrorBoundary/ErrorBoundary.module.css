@@ -1,0 +1,19 @@
+.box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-size: 1.125rem;
+}
+
+.message {
+  margin: 0 0 var(--space-4);
+  color: var(--muted);
+  font-size: 0.875rem;
+}

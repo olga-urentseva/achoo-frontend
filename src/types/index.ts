@@ -34,3 +34,20 @@ export interface CreateReportInput {
   allergen: string;
   severity: number;
 }
+
+/** Status color buckets returned by the API (green < yellow < red < purple). */
+export type SeverityColor = "green" | "yellow" | "red" | "purple";
+
+/** One region with reports today, from `GET /regions/status` — a map dot. */
+export interface RegionStatus {
+  regionId: number;
+  name: string;
+  admin1: string;
+  country: string;
+  lat: number;
+  lng: number;
+  date: string;
+  reportCount: number;
+  avgSeverity: number;
+  color: SeverityColor | null;
+}

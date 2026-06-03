@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { api } from "../api/client";
-import type { Place } from "../api/types";
-import { useDebounced } from "../hooks/useDebounced";
+import { useEffect, useId, useRef, useState } from "react";
+import searchPlaces from "../../../api/searchPlaces";
+import { useDebounced } from "../../../hooks/useDebounced";
+import { Input } from "../../atoms/Input/Input";
+import type { Place } from "../../../types";
+import styles from "./PlaceSearch.module.css";
 
 interface Props {
   onSelect: (place: Place) => void;
@@ -13,6 +15,7 @@ export function PlaceSearch({ onSelect }: Props) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
 
   const debounced = useDebounced(query, 250);
 
@@ -25,8 +28,7 @@ export function PlaceSearch({ onSelect }: Props) {
 
     let cancelled = false;
     setLoading(true);
-    api
-      .searchPlaces(q)
+    searchPlaces(q)
       .then((r) => {
         if (cancelled) return;
         setResults(r);
@@ -57,34 +59,41 @@ export function PlaceSearch({ onSelect }: Props) {
     setOpen(false);
   }
 
+  const showList = open && results.length > 0;
+
   return (
-    <div className="search" ref={boxRef}>
-      <input
-        className="input"
+    <div className={styles.search} ref={boxRef}>
+      <Input
         placeholder="Start typing your city…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setOpen(true)}
         autoComplete="off"
+        role="combobox"
+        aria-expanded={showList}
+        aria-controls={listId}
+        aria-autocomplete="list"
       />
-      {loading && <span className="search-hint">searching…</span>}
+      {loading && <span className={styles.hint}>searching…</span>}
 
-      {open && results.length > 0 && (
-        <ul className="dropdown">
+      {showList && (
+        <ul className={styles.dropdown} id={listId} role="listbox">
           {results.map((p) => {
             const rollsUp = p.region.name !== p.name;
             return (
               <li
                 key={p.placeId}
-                className="option"
+                className={styles.option}
+                role="option"
+                aria-selected={false}
                 onMouseDown={() => pick(p)}
               >
-                <span className="option-place">
+                <span className={styles.optionPlace}>
                   {p.name}
                   {p.admin1 ? `, ${p.admin1}` : ""}, {p.country}
                 </span>
                 {rollsUp && (
-                  <span className="option-region">→ {p.region.name}</span>
+                  <span className={styles.optionRegion}>→ {p.region.name}</span>
                 )}
               </li>
             );

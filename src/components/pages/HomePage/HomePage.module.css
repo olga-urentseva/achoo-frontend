@@ -1,0 +1,24 @@
+/* Two panels that wrap to one column on narrow screens — no media queries. */
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.mapPanel {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+.formPanel {
+  flex: 1 1 22rem;
+  min-width: 0;
+  max-width: 26.25rem;
+}
+
+.hint {
+  color: var(--muted);
+  text-align: center;
+}

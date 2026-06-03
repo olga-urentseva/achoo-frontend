@@ -1,5 +1,3 @@
-import type { CreateReportInput, Meta, Place, Report } from "./types";
-
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
 export class ApiError extends Error {
@@ -23,7 +21,7 @@ function messageFromBody(body: unknown): string | undefined {
   return undefined;
 }
 
-async function http<T>(path: string, init?: RequestInit): Promise<T> {
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     ...init,
     headers: { "content-type": "application/json", ...init?.headers },
@@ -35,17 +33,14 @@ async function http<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export const api = {
-  getMeta: () => http<Meta>("/meta"),
+export function get<T>(path: string): Promise<T> {
+  return request<T>(path);
+}
 
-  searchPlaces: (q: string, limit = 8) =>
-    http<Place[]>(
-      `/places/search?q=${encodeURIComponent(q)}&limit=${limit}`,
-    ),
+export function post<T>(path: string, body: unknown): Promise<T> {
+  return request<T>(path, { method: "POST", body: JSON.stringify(body) });
+}
 
-  createReport: (input: CreateReportInput) =>
-    http<Report>("/reports", {
-      method: "POST",
-      body: JSON.stringify(input),
-    }),
-};
+export function put<T>(path: string, body: unknown): Promise<T> {
+  return request<T>(path, { method: "PUT", body: JSON.stringify(body) });
+}

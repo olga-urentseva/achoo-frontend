@@ -1,0 +1,39 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+
+.logo {
+  font-size: 2.5rem;
+  margin: 0;
+  letter-spacing: -0.0625rem;
+}
+
+.tagline {
+  margin: var(--space-1) 0 0;
+  color: var(--muted);
+}
+
+.main {
+  width: 100%;
+  max-width: 70rem;
+}
+
+.hint {
+  color: var(--muted);
+  text-align: center;
+}
+
+.footer {
+  margin-top: var(--space-8);
+  font-size: 0.75rem;
+  color: var(--muted);
+}
