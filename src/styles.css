@@ -1,0 +1,212 @@
+:root {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --ink: #1c2430;
+  --muted: #6b7785;
+  --line: #e2e8f0;
+  --accent: #2f6fed;
+  --accent-ink: #ffffff;
+  --error: #d64545;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 16px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  font-size: 40px;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.tagline {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.main {
+  width: 100%;
+  max-width: 420px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 24px rgba(20, 30, 50, 0.06);
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 18px 0 6px;
+}
+
+.label:first-of-type {
+  margin-top: 0;
+}
+
+.input {
+  width: 100%;
+  padding: 11px 13px;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+/* search + dropdown */
+.search {
+  position: relative;
+}
+
+.search-hint {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(20, 30, 50, 0.12);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--bg);
+}
+
+.option-place {
+  font-size: 14px;
+}
+
+.option-region {
+  font-size: 12px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.resolved {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* severity */
+.severity {
+  display: flex;
+  gap: 8px;
+}
+
+.sev {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.05s ease;
+}
+
+.sev:hover {
+  transform: translateY(-1px);
+}
+
+/* Selected state fill is applied via inline style (the severity hue). */
+.sev-on {
+  color: #fff;
+}
+
+.btn {
+  width: 100%;
+  margin-top: 22px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-ink);
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.error {
+  margin: 14px 0 0;
+  color: var(--error);
+  font-size: 14px;
+}
+
+.hint,
+.muted {
+  color: var(--muted);
+}
+
+.done-title {
+  margin-top: 0;
+}
+
+.footer {
+  margin-top: 32px;
+  font-size: 12px;
+  color: var(--muted);
+}
