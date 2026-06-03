@@ -6,16 +6,26 @@
   box-shadow: var(--shadow-card);
 }
 
-.svg {
-  display: block;
+/* Holds the base map and the dot overlay in one coordinate box. */
+.frame {
+  position: relative;
   width: 100%;
-  height: auto;
 }
 
-.land {
-  fill: oklch(0.9 0.012 245);
-  stroke: oklch(0.86 0.012 245);
-  stroke-width: 0.15;
+.base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* The SVG land is solid black; dim it to a light grey backdrop. */
+  opacity: 0.16;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* Status sets the group color; the dots inherit it via currentColor. */
@@ -35,7 +45,7 @@
 .dot {
   fill: currentColor;
   stroke: var(--card);
-  stroke-width: 0.3;
+  stroke-width: 0.7;
 }
 
 .pulse {
@@ -48,11 +58,11 @@
 
 @keyframes pulse {
   0% {
-    transform: scale(0.6);
+    transform: scale(0.5);
     opacity: 0.5;
   }
   70% {
-    transform: scale(2.4);
+    transform: scale(2.2);
     opacity: 0;
   }
   100% {
