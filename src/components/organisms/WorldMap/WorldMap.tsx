@@ -1,4 +1,6 @@
-import { WORLD_PATH, MAP_WIDTH, MAP_HEIGHT } from "../../../assets/worldPath";
+import worldUrl from "./world-omg.svg";
+import { project } from "./project";
+import { MAP_WIDTH, MAP_HEIGHT } from "./mapMeta";
 import type { RegionStatus, SeverityColor } from "../../../types";
 import styles from "./WorldMap.module.css";
 
@@ -9,10 +11,6 @@ const COLOR_CLASS: Record<SeverityColor, string | undefined> = {
   purple: styles.purple,
 };
 
-// Same equirectangular mapping used to generate WORLD_PATH.
-const toX = (lng: number) => lng + 180;
-const toY = (lat: number) => 90 - lat;
-
 type Props = {
   regions: RegionStatus[];
 };
@@ -22,33 +20,41 @@ export function WorldMap({ regions }: Props) {
 
   return (
     <div className={styles.worldmap}>
-      <svg
-        className={styles.svg}
-        viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
-        role="img"
-        aria-label="World map of allergy reports today"
-        preserveAspectRatio="xMidYMid meet"
+      <div
+        className={styles.frame}
+        style={{ aspectRatio: `${MAP_WIDTH} / ${MAP_HEIGHT}` }}
       >
-        <path className={styles.land} d={WORLD_PATH} />
+        {/* The world map, used as-is — its own coordinate box. */}
+        <img className={styles.base} src={worldUrl} alt="" />
 
-        {regions.map((r) => {
-          const colorClass = r.color ? COLOR_CLASS[r.color] : styles.green;
-          const label = `${r.name}, ${r.country} — ${r.reportCount} report${
-            r.reportCount === 1 ? "" : "s"
-          }`;
-          return (
-            <g
-              key={r.regionId}
-              className={colorClass}
-              transform={`translate(${toX(r.lng)} ${toY(r.lat)})`}
-            >
-              <title>{label}</title>
-              <circle className={styles.pulse} r={2.4} />
-              <circle className={styles.dot} r={1.1} />
-            </g>
-          );
-        })}
-      </svg>
+        {/* Dot overlay sharing the SVG's coordinate space, so dots line up. */}
+        <svg
+          className={styles.overlay}
+          viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          aria-label="World map of allergy reports today"
+        >
+          {regions.map((r) => {
+            const colorClass = r.color ? COLOR_CLASS[r.color] : styles.green;
+            const { x, y } = project(r.lat, r.lng);
+            const label = `${r.name}, ${r.country} — ${r.reportCount} report${
+              r.reportCount === 1 ? "" : "s"
+            }`;
+            return (
+              <g
+                key={r.regionId}
+                className={colorClass}
+                transform={`translate(${x} ${y})`}
+              >
+                <title>{label}</title>
+                <circle className={styles.pulse} r={6.5} />
+                <circle className={styles.dot} r={3} />
+              </g>
+            );
+          })}
+        </svg>
+      </div>
 
       <div className={styles.caption}>
         {regions.length === 0 ? (
