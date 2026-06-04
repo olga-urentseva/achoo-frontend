@@ -20,7 +20,9 @@ export function PageLayout({ children }: Props) {
         </ErrorBoundary>
       </main>
 
-      <footer className={styles.footer}>Anonymous · no account · once a day</footer>
+      <footer className={styles.footer}>
+        Anonymous · no account · once a day
+      </footer>
     </div>
   );
 }
