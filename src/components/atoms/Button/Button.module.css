@@ -31,3 +31,17 @@
   color: var(--ink);
   border-color: var(--line);
 }
+
+/* Quiet, low-emphasis action — auto width, muted, no fill. */
+.subtle {
+  width: auto;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: transparent;
+  color: var(--muted);
+}
+
+.subtle:hover {
+  color: var(--ink);
+}

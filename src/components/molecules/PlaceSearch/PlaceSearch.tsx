@@ -9,6 +9,11 @@ interface Props {
   onSelect: (place: Place) => void;
 }
 
+/** "City, Admin1, Country" — shown in the dropdown and as the picked value. */
+function placeLabel(p: Place): string {
+  return `${p.name}${p.admin1 ? `, ${p.admin1}` : ""}, ${p.country}`;
+}
+
 export function PlaceSearch({ onSelect }: Props) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Place[]>([]);
@@ -55,7 +60,7 @@ export function PlaceSearch({ onSelect }: Props) {
 
   function pick(place: Place) {
     onSelect(place);
-    setQuery(place.name);
+    setQuery(placeLabel(place));
     setOpen(false);
   }
 
@@ -86,12 +91,12 @@ export function PlaceSearch({ onSelect }: Props) {
                 className={styles.option}
                 role="option"
                 aria-selected={false}
-                onMouseDown={() => pick(p)}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  pick(p);
+                }}
               >
-                <span className={styles.optionPlace}>
-                  {p.name}
-                  {p.admin1 ? `, ${p.admin1}` : ""}, {p.country}
-                </span>
+                <span className={styles.optionPlace}>{placeLabel(p)}</span>
                 {rollsUp && (
                   <span className={styles.optionRegion}>→ {p.region.name}</span>
                 )}

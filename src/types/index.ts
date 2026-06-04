@@ -51,3 +51,9 @@ export interface RegionStatus {
   avgSeverity: number;
   color: SeverityColor | null;
 }
+
+/** The place nearest to some coordinates, from `GET /places/nearest`. */
+export interface NearestPlace extends Place {
+  /** Great-circle distance from the queried point to the place, km. */
+  distanceKm: number;
+}
