@@ -1,0 +1,57 @@
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  box-shadow: var(--shadow-card);
+}
+
+.text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  vertical-align: -0.1rem;
+}
+
+.count[data-color="green"] {
+  color: var(--status-green);
+}
+.count[data-color="yellow"] {
+  color: var(--status-yellow);
+}
+.count[data-color="red"] {
+  color: var(--status-red);
+}
+.count[data-color="purple"] {
+  color: var(--status-purple);
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.chip[data-color="green"] {
+  background: var(--status-green);
+  color: var(--accent-ink);
+}
+.chip[data-color="yellow"] {
+  background: var(--status-yellow);
+  color: var(--ink);
+}
+.chip[data-color="red"] {
+  background: var(--status-red);
+  color: var(--accent-ink);
+}
+.chip[data-color="purple"] {
+  background: var(--status-purple);
+  color: var(--accent-ink);
+}

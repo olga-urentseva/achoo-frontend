@@ -1,0 +1,52 @@
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-card);
+}
+
+.label {
+  margin: 0 0 var(--space-3);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* "or search" rule */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.locate {
+  text-align: center;
+}
+
+.error {
+  margin: var(--space-3) 0 0;
+  color: var(--error);
+  font-size: 0.875rem;
+}
+
+.current {
+  margin: var(--space-4) 0 0;
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+
+.far {
+  color: var(--muted);
+}
