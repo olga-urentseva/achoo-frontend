@@ -1,5 +1,7 @@
 export interface Meta {
   allergens: string[];
+  /** Sentinel allergen for "I don't know" — offered as an extra picker option. */
+  unknownAllergen: string;
   severity: { min: number; max: number };
   colors: string[];
 }
@@ -29,10 +31,15 @@ export interface Report {
   createdAt: string;
 }
 
-export interface CreateReportInput {
-  placeId: number;
+/** One allergen + how bad it is today; a report can carry several. */
+export interface ReportItem {
   allergen: string;
   severity: number;
+}
+
+export interface CreateReportInput {
+  placeId: number;
+  reports: ReportItem[];
 }
 
 /** Status color buckets returned by the API (green < yellow < red < purple). */
