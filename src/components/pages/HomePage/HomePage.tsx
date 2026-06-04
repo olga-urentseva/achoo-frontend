@@ -5,6 +5,7 @@ import { LocationPicker } from "../../organisms/LocationPicker/LocationPicker";
 import { RegionSummary } from "../../organisms/RegionSummary/RegionSummary";
 import { ReportForm } from "../../organisms/ReportForm/ReportForm";
 import { ErrorBoundary } from "../../templates/ErrorBoundary/ErrorBoundary";
+import { loadAllergens, saveAllergens } from "../../../lib/allergenProfile";
 import type { Place } from "../../../types";
 import styles from "./HomePage.module.css";
 
@@ -18,6 +19,16 @@ export function HomePage() {
   // The chosen location anchors both halves: it gives the region to read counts
   // for and the placeId to report under.
   const [place, setPlace] = useState<Place | null>(null);
+
+  // The user's allergens, restored from localStorage so a returning visitor
+  // sees them already selected. The picker lives inside the report form, right
+  // next to the severity picker; changes are persisted as they happen.
+  const [allergens, setAllergens] = useState<string[]>(loadAllergens);
+
+  function updateAllergens(next: string[]) {
+    setAllergens(next);
+    saveAllergens(next);
+  }
 
   return (
     <div className={styles.layout}>
@@ -36,8 +47,8 @@ export function HomePage() {
           Boundaries stay mounted (we gate only the content on `place`). If they
           were created together with their suspending child, React would bubble
           the fallback up to the page-level <Suspense> and flash the map away.
-          Mounted up front, the city selection loads in place within the
-          action's transition.
+          Mounted up front, the form loads in place within the action's
+          transition.
         */}
         <div className={styles.panelBody}>
           <ErrorBoundary>
@@ -50,8 +61,12 @@ export function HomePage() {
               )}
             </Suspense>
             <Suspense fallback={<p className={styles.hint}>loading…</p>}>
-              {/* Remount on location change so the action state resets. */}
-              {place && <ReportForm key={place.placeId} place={place} />}
+              {/* Shown right away; submitting just needs a city to be picked. */}
+              <ReportForm
+                place={place}
+                allergens={allergens}
+                onAllergensChange={updateAllergens}
+              />
             </Suspense>
           </ErrorBoundary>
         </div>

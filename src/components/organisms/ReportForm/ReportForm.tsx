@@ -3,24 +3,29 @@ import getMeta from "../../../api/getMeta";
 import createReport from "../../../api/createReport";
 import { ApiError } from "../../../lib/http";
 import { hasReportedToday, markReported } from "../../../lib/throttle";
+import { AllergenPicker } from "../../molecules/AllergenPicker/AllergenPicker";
 import { SeveritySelector } from "../../molecules/SeveritySelector/SeveritySelector";
 import { Button } from "../../atoms/Button/Button";
-import { Select } from "../../atoms/Select/Select";
 import type { Place } from "../../../types";
 import styles from "./ReportForm.module.css";
 
 type Result = { ok: true } | { ok: false; error: string } | null;
 
 type Props = {
-  /** Location chosen upstream — supplies the placeId to report under. */
-  place: Place;
+  /** Location chosen upstream — supplies the placeId to report under, or null
+   * until the user picks a city (the form is shown right away regardless). */
+  place: Place | null;
+  /** The user's allergens (their saved profile), shown pre-selected. */
+  allergens: string[];
+  /** Persist a change to the allergen selection (also saved to localStorage). */
+  onAllergensChange: (next: string[]) => void;
 };
 
-export function ReportForm({ place }: Props) {
-  // /meta is the source of truth for allergens + severity range.
+export function ReportForm({ place, allergens, onAllergensChange }: Props) {
+  // /meta is the source of truth for the allergen options + severity range.
   const meta = use(getMeta());
 
-  const allergenId = useId();
+  const allergensId = useId();
   const severityId = useId();
   const errorId = useId();
 
@@ -29,11 +34,16 @@ export function ReportForm({ place }: Props) {
 
   const [result, action, pending] = useActionState<Result, FormData>(
     async (_prev, formData) => {
-      const allergen = String(formData.get("allergen") ?? "");
       const severity = Number(formData.get("severity") ?? 0);
 
-      if (!allergen || !severity) {
-        return { ok: false, error: "Pick an allergen and how bad it is." };
+      if (!place) {
+        return { ok: false, error: "Pick your location first." };
+      }
+      if (allergens.length === 0) {
+        return { ok: false, error: "Pick your allergens, or “Don't know”." };
+      }
+      if (!severity) {
+        return { ok: false, error: "Pick how bad it is today." };
       }
       if (hasReportedToday(place.region.id)) {
         return {
@@ -42,9 +52,12 @@ export function ReportForm({ place }: Props) {
         };
       }
 
+      // One severity today, shared across every allergen the user has.
+      const reports = allergens.map((allergen) => ({ allergen, severity }));
+
       showSubmitted(true);
       try {
-        await createReport({ placeId: place.placeId, allergen, severity });
+        await createReport({ placeId: place.placeId, reports });
         markReported(place.region.id);
         return { ok: true };
       } catch (e) {
@@ -62,7 +75,7 @@ export function ReportForm({ place }: Props) {
       <div className={styles.card} aria-live="polite">
         <h2 className={styles.doneTitle}>Thanks! 🤧</h2>
         <p>
-          Your report for <strong>{place.region.name}</strong> was recorded.
+          Your report for <strong>{place?.region.name}</strong> was recorded.
         </p>
         <p className={styles.muted}>Come back tomorrow to log again.</p>
       </div>
@@ -73,29 +86,21 @@ export function ReportForm({ place }: Props) {
 
   return (
     <form className={styles.card} action={action}>
-      <h2 className={styles.title}>Add your report</h2>
-      <p className={styles.resolved}>
-        Reporting under <strong>{place.region.name}</strong>,{" "}
-        {place.region.country}
-      </p>
+      <h2 className={styles.title}>How do you feel today?</h2>
 
-      <label className={styles.label} htmlFor={allergenId}>
-        Allergen
-      </label>
-      <Select
-        id={allergenId}
-        name="allergen"
-        defaultValue={meta.allergens[0] ?? ""}
-      >
-        {meta.allergens.map((a) => (
-          <option key={a} value={a}>
-            {a}
-          </option>
-        ))}
-      </Select>
+      <p className={styles.label} id={allergensId}>
+        Your allergens
+      </p>
+      <AllergenPicker
+        options={[...meta.allergens, meta.unknownAllergen]}
+        value={allergens}
+        onChange={onAllergensChange}
+        labels={{ [meta.unknownAllergen]: "Don't know" }}
+        labelledBy={allergensId}
+      />
 
       <p className={styles.label} id={severityId}>
-        How bad is it? ({meta.severity.min}–{meta.severity.max})
+        How bad is it today? ({meta.severity.min}–{meta.severity.max})
       </p>
       <SeveritySelector
         name="severity"
@@ -112,7 +117,7 @@ export function ReportForm({ place }: Props) {
 
       <Button
         type="submit"
-        disabled={pending}
+        disabled={pending || !place}
         aria-describedby={error ? errorId : undefined}
       >
         {pending ? "Submitting…" : "Submit report"}
