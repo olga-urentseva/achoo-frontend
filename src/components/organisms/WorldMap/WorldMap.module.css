@@ -28,18 +28,10 @@
   height: 100%;
 }
 
-/* Status sets the group color; the dots inherit it via currentColor. */
-.green {
-  color: var(--status-green);
-}
-.yellow {
-  color: var(--status-yellow);
-}
-.red {
-  color: var(--status-red);
-}
-.purple {
-  color: var(--status-purple);
+/* The group's `data-sev` (see index.css) sets --sev; the dots read it via
+ * currentColor. */
+.pin {
+  color: var(--sev);
 }
 
 .dot {

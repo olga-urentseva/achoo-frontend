@@ -1,3 +1,14 @@
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.picker[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .grid {
   display: flex;
   flex-wrap: wrap;
@@ -17,7 +28,6 @@
   padding: 0.5rem 0.875rem;
   font-size: 0.9375rem;
   font-weight: 600;
-  text-transform: capitalize;
   background: var(--card);
   border: 0.125rem solid var(--line);
   border-radius: var(--radius);
@@ -39,4 +49,29 @@
 .input:focus-visible + .face {
   outline: 0.1875rem solid var(--accent-soft);
   outline-offset: 0.125rem;
+}
+
+/* The "show more" tail expander and its revealed plants. */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.more {
+  align-self: flex-start;
+  padding: 0.25rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.more:focus-visible {
+  outline: 0.1875rem solid var(--accent-soft);
+  outline-offset: 0.125rem;
+  border-radius: var(--radius);
 }

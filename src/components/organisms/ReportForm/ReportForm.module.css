@@ -1,9 +1,8 @@
+/* Flat, no card chrome — continuous with the location picker above, so the
+ * submit button reads as the end of one form (location + report), not a
+ * separate card detached from where the location is chosen. */
 .card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  box-shadow: var(--shadow-card);
+  padding: 0;
 }
 
 .title {
@@ -31,6 +30,16 @@
 
 .doneTitle {
   margin-top: 0;
+}
+
+.unknown {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: var(--space-3);
+  font-size: 0.875rem;
+  color: var(--muted);
+  cursor: pointer;
 }
 
 /* The action button is always the last child — space it from the controls. */

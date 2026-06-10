@@ -1,0 +1,117 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* The user's own families get a tinted block so they stand out from the rest. */
+.yours {
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+}
+
+.heading {
+  margin: 0 0 var(--space-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.scoreWrapper {
+  display: block;
+}
+
+.innerWrapper {
+  padding: var(--space-3) var(--space-4);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.family {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+/* The botanical family tag — hover/focus reveals the rest of its plants. */
+.tagWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.tag {
+  font-weight: 500;
+  color: var(--muted);
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15rem;
+}
+
+.tag:focus-visible {
+  outline: 0.1875rem solid var(--accent-soft);
+  outline-offset: 0.125rem;
+  border-radius: 0.25rem;
+}
+
+.tip {
+  position: absolute;
+  top: calc(100% + 0.375rem);
+  left: 0;
+  z-index: 10;
+  width: max-content;
+  max-width: 15rem;
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-pop);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease;
+}
+
+.tagWrap:hover .tip,
+.tagWrap:focus-within .tip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.quiet {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.empty {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Colored by severity level via `data-sev` (see index.css) — the same six
+ * colors as the report picker, so a given severity is always one color. */
+.chip {
+  display: inline-block;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--sev);
+  color: var(--sev-ink);
+}

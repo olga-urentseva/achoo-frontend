@@ -3,7 +3,7 @@
 ## Tech Stack
 
 - React 19 + TypeScript
-- Single page, no router — the app is composed directly in `main.tsx`
+- React Router (v7) for **routing only** — `createBrowserRouter` in `main.tsx`. Data is **never** loaded via router loaders/`useLoaderData`; pages fetch with the React 19 `use` hook (see below)
 - Data fetching with React 19 `use` — no data-fetching libraries (no React Query/SWR), no caching layer
 - Native controlled forms with manual validation — no form libraries (no React Hook Form/Zod)
 - CSS Modules with `rem`/`em` units — no Tailwind, no `px` for sizing/spacing
@@ -67,9 +67,11 @@ export default async function getProducts() {
 
 ### App entry (`src/main.tsx`)
 
-- No router. `main.tsx` mounts `PageLayout` wrapping the page component
+- `main.tsx` builds a `createBrowserRouter` with `PageLayout` as the layout route (renders `<Outlet/>`) and the pages as children (`/` → `HomePage`, `/allergens` → `AllergensPage`)
+- Routing only: no `loader`/`action`/`useLoaderData`. Pages fetch with `use` exactly as before; the router just decides which page mounts
 - `ErrorBoundary` is a class component (`getDerivedStateFromError` / `componentDidCatch`) — it catches render errors, including promises rejected inside `use`
-- `<Suspense>` in `PageLayout` shows the fallback while `use` resolves data
+- `<Suspense>` in `PageLayout` (wrapping the `<Outlet/>`) shows the fallback while `use` resolves data
+- Navigate with `<Link>` / `<ButtonedLink>` (the atom that styles a router `Link` like a `Button`)
 
 ### Component rules
 

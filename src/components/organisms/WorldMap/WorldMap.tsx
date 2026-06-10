@@ -1,15 +1,8 @@
 import worldUrl from "./world-omg.svg";
 import { project } from "./project";
 import { MAP_WIDTH, MAP_HEIGHT } from "./mapMeta";
-import type { RegionStatus, SeverityColor } from "../../../types";
+import type { RegionStatus } from "../../../types";
 import styles from "./WorldMap.module.css";
-
-const COLOR_CLASS: Record<SeverityColor, string | undefined> = {
-  green: styles.green,
-  yellow: styles.yellow,
-  red: styles.red,
-  purple: styles.purple,
-};
 
 type Props = {
   regions: RegionStatus[];
@@ -33,10 +26,9 @@ export function WorldMap({ regions }: Props) {
           viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
           preserveAspectRatio="xMidYMid meet"
           role="img"
-          aria-label="World map of allergy reports today"
+          aria-label="World map of allergy reports, last 3 days"
         >
           {regions.map((r) => {
-            const colorClass = r.color ? COLOR_CLASS[r.color] : styles.green;
             const { x, y } = project(r.lat, r.lng);
             const label = `${r.name}, ${r.country} — ${r.reportCount} report${
               r.reportCount === 1 ? "" : "s"
@@ -44,7 +36,8 @@ export function WorldMap({ regions }: Props) {
             return (
               <g
                 key={r.regionId}
-                className={colorClass}
+                className={styles.pin}
+                data-sev={Math.round(r.avgSeverity)}
                 transform={`translate(${x} ${y})`}
               >
                 <title>{label}</title>
@@ -58,12 +51,12 @@ export function WorldMap({ regions }: Props) {
 
       <div className={styles.caption}>
         {regions.length === 0 ? (
-          "No reports yet today"
+          "No reports yet in the last 3 days"
         ) : (
           <>
             <span className={styles.count}>{totalReports}</span> report
             {totalReports === 1 ? "" : "s"} across {regions.length} region
-            {regions.length === 1 ? "" : "s"} today
+            {regions.length === 1 ? "" : "s"} in the last 3 days
           </>
         )}
       </div>
