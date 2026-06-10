@@ -1,0 +1,123 @@
+.page {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0 0 var(--space-3);
+  font-size: 1.5rem;
+}
+
+.intro {
+  margin: 0 0 var(--space-6);
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.family {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+.familyName {
+  margin: 0 0 var(--space-1);
+  font-size: 1.125rem;
+}
+
+.plants {
+  margin: 0 0 var(--space-3);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.proteins {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.protein {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.25rem var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.proteinName {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.badges {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: start;
+}
+
+.kind,
+.strength {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.kind {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.strength[data-strength="strong"] {
+  background: var(--sev-5);
+  color: var(--accent-ink);
+}
+.strength[data-strength="moderate"] {
+  background: var(--sev-3);
+  color: var(--ink);
+}
+.strength[data-strength="weak"] {
+  background: var(--line);
+  color: var(--muted);
+}
+
+.carriers {
+  grid-column: 1 / -1;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.source {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.source a {
+  color: var(--accent);
+}

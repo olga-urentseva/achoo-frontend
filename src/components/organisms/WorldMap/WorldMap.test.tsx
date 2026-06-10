@@ -29,12 +29,16 @@ describe("WorldMap", () => {
         ]}
       />,
     );
-    expect(screen.getByText(/across 2 regions today/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/across 2 regions in the last 3 days/),
+    ).toBeInTheDocument();
     expect(screen.getByText("5")).toBeInTheDocument();
   });
 
   it("shows an empty state when nobody has reported", () => {
     render(<WorldMap regions={[]} />);
-    expect(screen.getByText("No reports yet today")).toBeInTheDocument();
+    expect(
+      screen.getByText("No reports yet in the last 3 days"),
+    ).toBeInTheDocument();
   });
 });

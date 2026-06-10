@@ -17,6 +17,11 @@
   letter-spacing: -0.0625rem;
 }
 
+.logoLink {
+  color: var(--accent);
+  text-decoration: none;
+}
+
 .tagline {
   margin: var(--space-1) 0 0;
   color: var(--muted);

@@ -1,9 +1,9 @@
-import { use, useActionState, useId, useOptimistic } from "react";
+import { use, useActionState, useId, useOptimistic, useState } from "react";
 import getMeta from "../../../api/getMeta";
-import createReport from "../../../api/createReport";
+import createSubmission from "../../../api/createSubmission";
 import { ApiError } from "../../../lib/http";
 import { hasReportedToday, markReported } from "../../../lib/throttle";
-import { AllergenPicker } from "../../molecules/AllergenPicker/AllergenPicker";
+import { PlantPicker } from "../../molecules/PlantPicker/PlantPicker";
 import { SeveritySelector } from "../../molecules/SeveritySelector/SeveritySelector";
 import { Button } from "../../atoms/Button/Button";
 import type { Place } from "../../../types";
@@ -15,19 +15,30 @@ type Props = {
   /** Location chosen upstream — supplies the placeId to report under, or null
    * until the user picks a city (the form is shown right away regardless). */
   place: Place | null;
-  /** The user's allergens (their saved profile), shown pre-selected. */
-  allergens: string[];
-  /** Persist a change to the allergen selection (also saved to localStorage). */
-  onAllergensChange: (next: string[]) => void;
+  /** The user's plants (their saved profile), shown pre-selected. */
+  plants: string[];
+  /** Persist a change to the plant selection (also saved to localStorage). */
+  onPlantsChange: (next: string[]) => void;
+  /** Fired after a report is stored, so the page can refresh the family panel. */
+  onReported?: () => void;
 };
 
-export function ReportForm({ place, allergens, onAllergensChange }: Props) {
-  // /meta is the source of truth for the allergen options + severity range.
+export function ReportForm({
+  place,
+  plants,
+  onPlantsChange,
+  onReported,
+}: Props) {
+  // /meta is the source of truth for the plant options + severity range.
   const meta = use(getMeta());
 
-  const allergensId = useId();
+  const plantsId = useId();
   const severityId = useId();
   const errorId = useId();
+
+  // "I don't know what I react to" → reports against the `unknown` family and
+  // ignores the plant selection. Transient (a per-day statement, not saved).
+  const [unknown, setUnknown] = useState(false);
 
   // Flip to the "thanks" view the instant we submit; reverts if the action fails.
   const [submitted, showSubmitted] = useOptimistic(false, () => true);
@@ -39,8 +50,11 @@ export function ReportForm({ place, allergens, onAllergensChange }: Props) {
       if (!place) {
         return { ok: false, error: "Pick your location first." };
       }
-      if (allergens.length === 0) {
-        return { ok: false, error: "Pick your allergens, or “Don't know”." };
+      if (!unknown && plants.length === 0) {
+        return {
+          ok: false,
+          error: "Pick the plants you react to, or check “I don't know”.",
+        };
       }
       if (!severity) {
         return { ok: false, error: "Pick how bad it is today." };
@@ -52,13 +66,16 @@ export function ReportForm({ place, allergens, onAllergensChange }: Props) {
         };
       }
 
-      // One severity today, shared across every allergen the user has.
-      const reports = allergens.map((allergen) => ({ allergen, severity }));
-
       showSubmitted(true);
       try {
-        await createReport({ placeId: place.placeId, reports });
+        await createSubmission({
+          placeId: place.placeId,
+          severity,
+          plants: unknown ? [] : plants,
+          ...(unknown && { unknown: true }),
+        });
         markReported(place.region.id);
+        onReported?.();
         return { ok: true };
       } catch (e) {
         return {
@@ -88,16 +105,26 @@ export function ReportForm({ place, allergens, onAllergensChange }: Props) {
     <form className={styles.card} action={action}>
       <h2 className={styles.title}>How do you feel today?</h2>
 
-      <p className={styles.label} id={allergensId}>
-        Your allergens
+      <p className={styles.label} id={plantsId}>
+        Plants you react to
       </p>
-      <AllergenPicker
-        options={[...meta.allergens, meta.unknownAllergen]}
-        value={allergens}
-        onChange={onAllergensChange}
-        labels={{ [meta.unknownAllergen]: "Don't know" }}
-        labelledBy={allergensId}
+      <PlantPicker
+        plants={meta.plants}
+        displayGroups={meta.displayGroups}
+        value={plants}
+        onChange={onPlantsChange}
+        disabled={unknown}
+        labelledBy={plantsId}
       />
+
+      <label className={styles.unknown}>
+        <input
+          type="checkbox"
+          checked={unknown}
+          onChange={(e) => setUnknown(e.target.checked)}
+        />
+        I don't know what I react to
+      </label>
 
       <p className={styles.label} id={severityId}>
         How bad is it today? ({meta.severity.min}–{meta.severity.max})

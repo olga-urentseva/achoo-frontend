@@ -32,7 +32,8 @@ export function LocationPicker({ value, onSelect }: Props) {
         onSelect(place);
         return place.distanceKm > FAR_KM ? { farKm: place.distanceKm } : null;
       } catch (e) {
-        const reason = e instanceof Error ? e.message : "Couldn't find your area.";
+        const reason =
+          e instanceof Error ? e.message : "Couldn't find your area.";
         return { error: `${reason} Search for your city instead.` };
       }
     },
@@ -46,7 +47,10 @@ export function LocationPicker({ value, onSelect }: Props) {
     <div className={styles.card}>
       <p className={styles.label}>Where are you?</p>
 
-      <PlaceSearch onSelect={(place) => startTransition(() => run(place))} />
+      <PlaceSearch
+        initialPlace={value}
+        onSelect={(place) => startTransition(() => run(place))}
+      />
 
       <div className={styles.divider}>
         <span>or</span>
@@ -70,7 +74,6 @@ export function LocationPicker({ value, onSelect }: Props) {
 
       {value && (
         <p className={styles.current}>
-          Using <strong>{value.name}</strong>, {value.country}
           {farKm !== null && (
             <span className={styles.far}>
               {" "}
