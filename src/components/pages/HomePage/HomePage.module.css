@@ -17,30 +17,20 @@
   margin-top: var(--space-5);
 }
 
-/* Shown until the user has reported (or chooses to peek): the give-to-get
-   prompt that keeps personal results behind a same-day report. */
+/* Shown until the user has reported (or chooses to peek). The give-to-get
+   prompt itself lives on the map; this just centres the way out of the gate. */
 .gate {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-3);
-  text-align: center;
-  padding: var(--space-5) var(--space-4);
-  background: var(--card);
-  border: 1px dashed var(--line);
-  border-radius: var(--radius-lg);
-}
-
-.gateText {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.5;
+  justify-content: center;
 }
 
 /* "Learn more" sits after the results — its own page (/allergens). */
 .learnMore {
   margin-top: var(--space-5);
-  text-align: center;
+}
+
+.learnMoreButton {
+  margin: 0 -0.5rem;
 }
 
 .formPanel {
@@ -50,7 +40,6 @@
 }
 
 .panelBody {
-  margin-top: var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);

@@ -15,3 +15,10 @@ export default function getRegionStatus(): Promise<RegionStatus[]> {
   });
   return promise;
 }
+
+/** Drop the memoized result so the next read re-fetches — call after filing a
+ *  report, so the map reflects the new report (and the picked city's pin can
+ *  take its region's severity colour). */
+export function clearRegionStatus(): void {
+  promise = undefined;
+}

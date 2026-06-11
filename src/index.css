@@ -11,6 +11,9 @@
   --secondary: oklch(0.57 0.065 140);
   --secondary-soft: oklch(0.57 0.065 140 / 0.25);
   --error: oklch(0.58 0.17 25);
+  /* Map surface — tweak these to retheme the map. */
+  --water: oklch(0.9 0.045 233); /* sea */
+  --land: oklch(0.84 0.03 150); /* land masses */
 
   /* The six severity colors, 1 (mild) → 6 (severe). One fixed color per level,
      used everywhere severity shows: the picker, result chips, map dots. */

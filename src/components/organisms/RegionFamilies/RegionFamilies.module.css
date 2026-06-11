@@ -37,61 +37,35 @@
 
 .row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-3);
 }
 
+/* Two lines: the family name, then a capped inline preview of its plants. */
 .family {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.familyName {
   font-size: 0.9375rem;
   font-weight: 600;
 }
 
-/* The botanical family tag — hover/focus reveals the rest of its plants. */
-.tagWrap {
-  position: relative;
-  display: inline-block;
-}
-
-.tag {
+/* The botanical family name, e.g. "(Fagales)". */
+.sci {
   font-weight: 500;
   color: var(--muted);
-  cursor: help;
-  text-decoration: underline dotted;
-  text-underline-offset: 0.15rem;
 }
 
-.tag:focus-visible {
-  outline: 0.1875rem solid var(--accent-soft);
-  outline-offset: 0.125rem;
-  border-radius: 0.25rem;
-}
-
-.tip {
-  position: absolute;
-  top: calc(100% + 0.375rem);
-  left: 0;
-  z-index: 10;
-  width: max-content;
-  max-width: 15rem;
-  padding: var(--space-2) var(--space-3);
+.members {
   font-size: 0.8125rem;
   font-weight: 400;
-  line-height: 1.4;
-  color: var(--ink);
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-pop);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.1s ease;
-}
-
-.tagWrap:hover .tip,
-.tagWrap:focus-within .tip {
-  opacity: 1;
-  visibility: visible;
+  line-height: 1.35;
+  color: var(--muted);
 }
 
 .quiet {

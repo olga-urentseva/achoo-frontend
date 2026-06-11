@@ -6,19 +6,35 @@
   box-shadow: var(--shadow-card);
 }
 
-/* Holds the base map and the dot overlay in one coordinate box. */
+/* Positioning context for the zooming frame and the prompt overlay. Clips the
+ * zoomed-in map (transform: scale on .frame) so it can't spill past the card. */
+.stage {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  /* Sea — shows through the transparent (non-land) parts of the base map. */
+  background: var(--water);
+}
+
+/* Holds the base map and the dot overlay in one coordinate box. The transform
+ * (set inline when a location is picked) zooms both layers together. */
 .frame {
   position: relative;
   width: 100%;
+  transition: transform 0.6s ease;
 }
 
+/* Land masses: the world SVG is used as a mask, so the fill is just --land —
+ * change that token (in index.css) to retheme the land. The sea is whatever
+ * shows through the masked-out (transparent) areas: the stage's --water. */
 .base {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  /* The SVG land is solid black; dim it to a light grey backdrop. */
-  opacity: 0.16;
+  background-color: var(--land);
+  -webkit-mask: url("./world-omg.svg") no-repeat center / 100% 100%;
+  mask: url("./world-omg.svg") no-repeat center / 100% 100%;
 }
 
 .overlay {
@@ -29,15 +45,16 @@
 }
 
 /* The group's `data-sev` (see index.css) sets --sev; the dots read it via
- * currentColor. */
+ * currentColor. Unreported neighbours have no data-sev, so they fall back to
+ * grey. */
 .pin {
-  color: var(--sev);
+  color: var(--sev, var(--muted));
 }
 
 .dot {
   fill: currentColor;
   stroke: var(--card);
-  stroke-width: 0.7;
+  stroke-width: 1;
 }
 
 .pulse {
@@ -46,6 +63,88 @@
   transform-box: fill-box;
   transform-origin: center;
   animation: pulse 2.4s ease-out infinite;
+}
+
+/* City name beside a dot, only rendered when the map is zoomed in. Sized in
+ * SVG user units (it lives in the viewBox), so it scales with the zoom. The
+ * card-colored halo keeps it legible over dots and land. */
+.cityLabel {
+  fill: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke-linejoin: round;
+  pointer-events: none;
+  
+}
+
+/* The picked place's pin. Takes its region's severity colour when that region
+ * has reports (data-sev sets --sev); accent when picked but unreported; muted
+ * (grey) while gated. */
+.focusDot {
+  fill: var(--sev, var(--accent));
+  stroke: var(--card);
+  stroke-width: 1;
+}
+
+.focus[data-gated="true"] .focusDot {
+  fill: var(--muted);
+}
+
+.focusLabel {
+  fill: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  paint-order: stroke;
+  pointer-events: none;
+}
+
+/* Flash shown when someone tries to zoom (not implemented yet). Centred over
+ * the map, ignores pointer events so it never blocks interaction. */
+.zoomHint {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  max-width: 80%;
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--ink);
+  background: color-mix(in oklch, var(--card) 94%, transparent);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-pop);
+  pointer-events: none;
+  z-index: 2;
+  animation: zoomHintIn 0.15s ease;
+}
+
+@keyframes zoomHintIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%);
+  }
+}
+
+/* Give-to-get prompt over the map. Sits at the bottom, off the zooming frame,
+ * on a translucent card so it stays readable against the map. */
+.prompt {
+  position: absolute;
+  left: var(--space-4);
+  right: var(--space-4);
+  bottom: var(--space-4);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--ink);
+  background: color-mix(in oklch, var(--card) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  backdrop-filter: blur(2px);
 }
 
 @keyframes pulse {
@@ -65,6 +164,10 @@
 @media (prefers-reduced-motion: reduce) {
   .pulse {
     animation: none;
+  }
+
+  .frame {
+    transition: none;
   }
 }
 

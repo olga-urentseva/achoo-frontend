@@ -103,8 +103,6 @@ export function ReportForm({
 
   return (
     <form className={styles.card} action={action}>
-      <h2 className={styles.title}>How do you feel today?</h2>
-
       <p className={styles.label} id={plantsId}>
         Plants you react to
       </p>

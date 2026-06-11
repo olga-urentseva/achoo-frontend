@@ -1,0 +1,132 @@
+.page {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0 0 var(--space-3);
+  font-size: 1.5rem;
+}
+
+.intro {
+  margin: 0 0 var(--space-6);
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-card);
+}
+
+/* The medical-advice caveat gets a warm accent edge so it reads as important. */
+.card[data-accent="warn"] {
+  border-left: 0.25rem solid var(--sev-4);
+}
+
+.cardTitle {
+  margin: 0 0 var(--space-2);
+  font-size: 1.125rem;
+}
+
+.text {
+  margin: 0 0 var(--space-3);
+  line-height: 1.55;
+}
+
+.text:last-child {
+  margin-bottom: 0;
+}
+
+.clearRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.clearNote {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.downloads {
+  margin: var(--space-4) 0 0;
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  border-radius: var(--radius);
+}
+
+.download:hover {
+  text-decoration: underline;
+}
+
+/* A personal sign-off — softer than the cards above: no box, a quiet accent
+ * rule, slightly smaller and warmer. */
+.note {
+  margin-top: var(--space-6);
+  padding-left: var(--space-4);
+  border-left: 0.125rem solid var(--accent-soft);
+}
+
+.noteLabel {
+  margin: 0 0 var(--space-2);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.noteText {
+  margin: 0 0 var(--space-3);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.signature {
+  margin: var(--space-3) 0 0;
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+.source {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.source a {
+  color: var(--accent);
+}
