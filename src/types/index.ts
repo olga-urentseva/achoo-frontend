@@ -57,6 +57,9 @@ export interface Place {
   admin1: string;
   country: string;
   population: number;
+  /** Place coordinates, so the map can zoom to a pick before any report. */
+  lat: number;
+  lng: number;
   region: PlaceRegion;
 }
 
@@ -104,10 +107,4 @@ export interface RegionStatus {
   reportCount: number;
   avgSeverity: number;
   color: SeverityColor | null;
-}
-
-/** The place nearest to some coordinates, from `GET /places/nearest`. */
-export interface NearestPlace extends Place {
-  /** Great-circle distance from the queried point to the place, km. */
-  distanceKm: number;
 }

@@ -22,6 +22,13 @@ export function hasReportedToday(regionId: number): boolean {
   return load()[String(regionId)] === today();
 }
 
+/** Reported in *any* region today — earns the global view (other cities, their
+ *  general numbers), even in regions the user hasn't personally reported in. */
+export function hasReportedAnythingToday(): boolean {
+  const t = today();
+  return Object.values(load()).some((d) => d === t);
+}
+
 export function markReported(regionId: number): void {
   const data = load();
   data[String(regionId)] = today();

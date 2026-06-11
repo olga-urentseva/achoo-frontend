@@ -5,6 +5,7 @@ import "./index.css";
 import { PageLayout } from "./components/templates/PageLayout/PageLayout";
 import { HomePage } from "./components/pages/HomePage/HomePage";
 import { AllergensPage } from "./components/pages/AllergensPage/AllergensPage";
+import { AboutPage } from "./components/pages/AboutPage/AboutPage";
 
 // Routing only — pages still fetch with the React 19 `use` hook, never loaders.
 const router = createBrowserRouter([
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/allergens", element: <AllergensPage /> },
+      { path: "/about", element: <AboutPage /> },
     ],
   },
 ]);

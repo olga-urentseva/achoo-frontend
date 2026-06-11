@@ -19,8 +19,8 @@ const sci = (familyId: string) =>
  * After a location is picked, show the severity for the families the user
  * reacts to (their picked plants, tagged with the botanical family) plus the
  * other families reported here. The plant → family mapping is done from `/meta`;
- * only the region id goes to the server. Hovering a family tag reveals the rest
- * of the plants in it.
+ * only the region id goes to the server. A few of each family's plants are shown
+ * inline (capped, so big families don't bloat the row).
  */
 export function RegionFamilies({ regionId, regionName, plants }: Props) {
   const meta = use(getMeta());
@@ -61,15 +61,32 @@ export function RegionFamilies({ regionId, regionName, plants }: Props) {
     return [...groups, ...loose].join(", ");
   };
 
-  // Tooltip text for a family tag: the other plants in the family. If the user
-  // already picked them all (e.g. via the cypress/grass group chip), there's no
-  // "rest" — fall back to the full member list so every tag still has a tooltip.
-  const familyTip = (familyId: string, picked: string[] = []): string => {
-    const members = membersByFamily.get(familyId) ?? [];
-    const rest = members.filter((n) => !picked.includes(n));
-    if (rest.length) return `Also in this family: ${rest.join(", ")}`;
-    if (members.length) return `Plants in this family: ${members.join(", ")}`;
-    return "";
+  // A short, inline preview of a family's plants — capped so a big family (the
+  // eight grasses) doesn't bloat the row. `exclude` drops the ones the user
+  // already picked, so a "your" row lists the *other* members. Returns null when
+  // there's nothing to add (unknown family, or they picked them all).
+  const MAX_INLINE = 3;
+  const membersLine = (
+    familyId: string,
+    { exclude = [], prefix = "" }: { exclude?: string[]; prefix?: string } = {},
+  ) => {
+    const members = (membersByFamily.get(familyId) ?? []).filter(
+      (n) => !exclude.includes(n),
+    );
+    if (members.length === 0) return null;
+    let shown = members.slice(0, MAX_INLINE);
+    let more = members.length - shown.length;
+    if (more === 1) {
+      shown = members; // don't hide a single extra behind "+1"
+      more = 0;
+    }
+    return (
+      <span className={styles.members}>
+        {prefix}
+        {shown.join(", ")}
+        {more > 0 ? ` +${more}` : ""}
+      </span>
+    );
   };
 
   // Your families — always listed (even if quiet), in meta.plants order.
@@ -100,21 +117,6 @@ export function RegionFamilies({ regionId, regionName, plants }: Props) {
     </span>
   );
 
-  // The family tag, with a tooltip (hover + keyboard focus) of the other plants.
-  const familyTag = (text: string, tip: string) =>
-    tip ? (
-      <span className={styles.tagWrap}>
-        <span className={styles.tag} tabIndex={0}>
-          {text}
-        </span>
-        <span className={styles.tip} role="tooltip">
-          {tip}
-        </span>
-      </span>
-    ) : (
-      <span className={styles.tag}>{text}</span>
-    );
-
   return (
     <div className={styles.panel}>
       {yours.length > 0 && (
@@ -127,8 +129,10 @@ export function RegionFamilies({ regionId, regionName, plants }: Props) {
             {yours.map(({ id, label, pickedNames, signal }) => (
               <li key={id} className={styles.row}>
                 <span className={styles.family}>
-                  {label}{" "}
-                  {familyTag(`(${sci(id)})`, familyTip(id, pickedNames))}
+                  <span className={styles.familyName}>
+                    {label} <span className={styles.sci}>({sci(id)})</span>
+                  </span>
+                  {membersLine(id, { exclude: pickedNames, prefix: "also " })}
                 </span>
                 {signal ? (
                   chip(signal)
@@ -152,10 +156,10 @@ export function RegionFamilies({ regionId, regionName, plants }: Props) {
             {others.map((f) => (
               <li key={f.family} className={styles.row}>
                 <span className={styles.family}>
-                  {familyTag(
-                    membersByFamily.has(f.family) ? sci(f.family) : f.label,
-                    familyTip(f.family),
-                  )}
+                  <span className={styles.familyName}>
+                    {membersByFamily.has(f.family) ? sci(f.family) : f.label}
+                  </span>
+                  {membersLine(f.family)}
                 </span>
                 {chip(f)}
               </li>

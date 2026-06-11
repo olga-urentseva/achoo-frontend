@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { ErrorBoundary } from "../ErrorBoundary/ErrorBoundary";
 import styles from "./PageLayout.module.css";
 
@@ -12,12 +12,36 @@ export function PageLayout() {
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.logo}>
-          <Link to="/" className={styles.logoLink}>
-            achoo
-          </Link>
-        </h1>
-        <p className={styles.tagline}>How bad are your allergies today?</p>
+        <div className={styles.bar}>
+          <h1 className={styles.logo}>
+            <Link to="/" className={styles.logoLink}>
+              achoo
+            </Link>
+          </h1>
+
+          <nav className={styles.nav}>
+            <NavLink
+              to="/allergens"
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
+              }
+            >
+              Allergens
+            </NavLink>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
+              }
+            >
+              About
+            </NavLink>
+          </nav>
+        </div>
+
+        <p className={styles.tagline}>
+          Community based anonymus allergies reports
+        </p>
       </header>
 
       <main className={styles.main}>
@@ -29,7 +53,10 @@ export function PageLayout() {
       </main>
 
       <footer className={styles.footer}>
-        Anonymous · no account · once a day
+        <Link to="/about" className={styles.footerLink}>
+          About &amp; privacy
+        </Link>
+        <span> · Anonymous, community-based reports</span>
       </footer>
     </div>
   );

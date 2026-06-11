@@ -7,8 +7,17 @@
 }
 
 .header {
-  text-align: center;
+  width: 100%;
+  max-width: 70rem;
   margin-bottom: var(--space-5);
+}
+
+/* Top row: logo on the left, nav links pushed to the opposite (right) side. */
+.bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
 }
 
 .logo {
@@ -27,6 +36,26 @@
   color: var(--muted);
 }
 
+.nav {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.navLink {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--accent);
+}
+
+.navLinkActive {
+  color: var(--accent);
+}
+
 .main {
   width: 100%;
   max-width: 70rem;
@@ -41,4 +70,14 @@
   margin-top: var(--space-8);
   font-size: 0.75rem;
   color: var(--muted);
+}
+
+.footerLink {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
 }
