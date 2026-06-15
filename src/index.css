@@ -3,6 +3,12 @@
      controls) into light — otherwise they render dark on a dark-mode OS. */
   color-scheme: light;
 
+  /* Always reserve the scrollbar gutter so the viewport width doesn't change
+     between a short page (no scrollbar) and a tall one. Without this the
+     centered header shifts sideways as the scrollbar appears/disappears on
+     navigation — the "header glitch". */
+  scrollbar-gutter: stable;
+
   /* Color tokens — OKLCH (palette: Hot Springs) */
   --bg: oklch(94.611% 0.00011 271.152);
   --card: oklch(1 0 0);
