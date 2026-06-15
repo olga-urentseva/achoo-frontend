@@ -1,6 +1,9 @@
-import { use } from "react";
+import { use, useState } from "react";
 import getMeta from "../../../api/getMeta";
 import getRegionFamilies from "../../../api/getRegionFamilies";
+import { Modal } from "../../atoms/Modal/Modal";
+import { IconButton } from "../../atoms/IconButton/IconButton";
+import { SeverityExplanation } from "../SeverityExplanation/SeverityExplanation";
 import type { Plant, RegionFamily } from "../../../types";
 import styles from "./RegionFamilies.module.css";
 
@@ -25,6 +28,9 @@ const sci = (familyId: string) =>
 export function RegionFamilies({ regionId, regionName, plants }: Props) {
   const meta = use(getMeta());
   const reported = use(getRegionFamilies(regionId));
+
+  // The "how is this calculated" explainer modal.
+  const [explainOpen, setExplainOpen] = useState(false);
 
   // Group every plant by family (names for tooltips) and track which the user
   // picked (full objects, so we can collapse display-group members below).
@@ -117,13 +123,36 @@ export function RegionFamilies({ regionId, regionName, plants }: Props) {
     </span>
   );
 
+  // Opens the explainer: how the x.x/6 score is built, plus the user's proteins.
+  const infoButton = (
+    <IconButton
+      className={styles.info}
+      aria-label="How these numbers are calculated"
+      onClick={() => setExplainOpen(true)}
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+        <path
+          d="M12 11v5"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <circle cx="12" cy="7.5" r="1.15" fill="currentColor" />
+      </svg>
+    </IconButton>
+  );
+
   return (
     <div className={styles.panel}>
       {yours.length > 0 && (
         <section className={styles.yours}>
           <p className={styles.heading}>
-            Results mathing the plants you picked in {regionName}, from the last
-            3 days
+            <span>
+              Results matching the plants you picked in {regionName}, from the
+              last 3 days
+            </span>
+            {infoButton}
           </p>
           <ul className={styles.list}>
             {yours.map(({ id, label, pickedNames, signal }) => (
@@ -148,9 +177,13 @@ export function RegionFamilies({ regionId, regionName, plants }: Props) {
       {others.length > 0 && (
         <section>
           <p className={styles.heading}>
-            {yours.length > 0
-              ? `Also reported in ${regionName}, last 3 days`
-              : `Reported in ${regionName}, last 3 days`}
+            <span>
+              {yours.length > 0
+                ? `Also reported in ${regionName}, last 3 days`
+                : `Reported in ${regionName}, last 3 days`}
+            </span>
+            {/* Only the lone explainer when there's no "yours" section above. */}
+            {yours.length === 0 && infoButton}
           </p>
           <ul className={styles.list}>
             {others.map((f) => (
@@ -167,6 +200,16 @@ export function RegionFamilies({ regionId, regionName, plants }: Props) {
           </ul>
         </section>
       )}
+
+      <Modal
+        open={explainOpen}
+        onClose={() => setExplainOpen(false)}
+        title="How this works"
+      >
+        {/* Mounted only while open, so it reads the latest plant profile and
+            only fetches the cross-reactivity map when actually viewed. */}
+        {explainOpen && <SeverityExplanation />}
+      </Modal>
     </div>
   );
 }

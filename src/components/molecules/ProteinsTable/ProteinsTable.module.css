@@ -1,0 +1,79 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Fixed layout: columns take their width from the colgroup, not their
+     content, so every table lines its columns up identically. */
+  table-layout: fixed;
+  font-size: 0.875rem;
+}
+
+/* Shared column widths — the source of the cross-table alignment. */
+.colName {
+  width: 26%;
+}
+.colType {
+  width: 18%;
+}
+.colStrength {
+  width: 16%;
+}
+.colCarriers {
+  width: 40%;
+}
+
+.table th,
+.table td {
+  padding: var(--space-2);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: break-word;
+}
+
+/* Column labels — quiet, uppercase, so they read as headers not data. */
+.table thead th {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.proteinName {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.kind,
+.strength {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.kind {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.strength[data-strength="strong"] {
+  background: var(--sev-5);
+  color: var(--accent-ink);
+}
+.strength[data-strength="moderate"] {
+  background: var(--sev-3);
+  color: var(--ink);
+}
+.strength[data-strength="weak"] {
+  background: var(--line);
+  color: var(--muted);
+}
+
+.carriers {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
