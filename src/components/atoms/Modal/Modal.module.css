@@ -1,12 +1,22 @@
 .dialog {
   width: min(50rem, calc(100vw - 2rem));
   max-height: calc(100vh - 4rem);
-  padding: 0.5rem 1rem;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--card);
   color: var(--ink);
   box-shadow: var(--shadow-pop);
+  /* The dialog itself never scrolls — it's a flex column whose content area is
+     the single scroller (see .content). */
+  overflow: hidden;
+}
+
+/* Layout only applies when open, so we don't override the user-agent
+   `dialog:not([open]) { display: none }` that keeps a closed dialog hidden. */
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
 }
 
 .dialog::backdrop {
@@ -16,17 +26,18 @@
 .body {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 4rem);
+  flex: 1;
+  min-height: 0;
 }
 
 .header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
   border-bottom: 1px solid var(--line);
-  align-items: center;
+  flex: 0 0 auto;
 }
 
 .title {
@@ -35,8 +46,11 @@
   font-weight: 700;
 }
 
-/* Scrolls when the explanation is taller than the viewport. */
+/* The only scroll region: grows to fill the dialog, scrolls when the
+   explanation is taller than the viewport. */
 .content {
-  padding: var(--space-4) var(--space-5) var(--space-5);
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  padding: var(--space-4) var(--space-5) var(--space-5);
 }

@@ -3,6 +3,8 @@ import getMeta from "../../../api/getMeta";
 import getCrossReactivity from "../../../api/getCrossReactivity";
 import { loadPlants } from "../../../lib/plantProfile";
 import { ErrorBoundary } from "../../templates/ErrorBoundary/ErrorBoundary";
+import { ProteinsTable } from "../../molecules/ProteinsTable/ProteinsTable";
+import { ProteinGlossary } from "../../molecules/ProteinGlossary/ProteinGlossary";
 import styles from "./SeverityExplanation.module.css";
 import { ButtonedLink } from "../../atoms/ButtonedLink/ButtonedLink";
 
@@ -50,60 +52,21 @@ function Body() {
               to one plant carrying a protein and you often react to the others
               that share it.
             </p>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th scope="col">Protein</th>
-                  <th scope="col">Type</th>
-                  <th scope="col">Strength</th>
-                  <th scope="col">From your plants</th>
-                </tr>
-              </thead>
-              <tbody>
-                {proteins.map((g) => {
-                  const carriers = g.plants
-                    .filter((id) => picked.has(id))
-                    .map((id) => nameById.get(id) ?? id);
-                  return (
-                    <tr key={g.protein}>
-                      <th scope="row" className={styles.proteinName}>
-                        {g.name}
-                      </th>
-                      <td>
-                        <span className={styles.kind} data-kind={g.kind}>
-                          {g.kind}
-                        </span>
-                      </td>
-                      <td>
-                        <span
-                          className={styles.strength}
-                          data-strength={g.strength}
-                        >
-                          {g.strength}
-                        </span>
-                      </td>
-                      <td className={styles.carriers}>{carriers.join(", ")}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <ProteinsTable
+              carriersLabel="From your plants"
+              rows={proteins.map((g) => ({
+                protein: g.protein,
+                name: g.name,
+                kind: g.kind,
+                strength: g.strength,
+                carriers: g.plants
+                  .filter((id) => picked.has(id))
+                  .map((id) => nameById.get(id) ?? id)
+                  .join(", "),
+              }))}
+            />
 
-            <dl className={styles.glossary}>
-              <dt>Type</dt>
-              <dd>
-                <strong>Major</strong> — the main protein people react to in a
-                plant. <strong>Panallergen</strong> — a protein shared across
-                many unrelated plants, so it links allergies broadly but usually
-                more weakly.
-              </dd>
-              <dt>Strength</dt>
-              <dd>
-                How likely reacting to one plant means reacting to the others
-                that carry the protein: <strong>strong</strong>,{" "}
-                <strong>moderate</strong> or <strong>weak</strong>.
-              </dd>
-            </dl>
+            <ProteinGlossary />
             <p>
               {`Source: `}
               <a href="https://eaaci.org/" target="_blank" rel="noreferrer">

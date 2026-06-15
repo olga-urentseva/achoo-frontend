@@ -1,4 +1,8 @@
 :root {
+  /* The app uses a fixed light palette, so opt native UI (scrollbars, form
+     controls) into light — otherwise they render dark on a dark-mode OS. */
+  color-scheme: light;
+
   /* Color tokens — OKLCH (palette: Hot Springs) */
   --bg: oklch(94.611% 0.00011 271.152);
   --card: oklch(1 0 0);

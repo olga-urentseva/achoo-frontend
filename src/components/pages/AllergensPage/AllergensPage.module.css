@@ -1,6 +1,5 @@
 .page {
-  max-width: 44rem;
-  margin: 0 auto;
+  width: 100%;
 }
 
 .back {
@@ -16,16 +15,64 @@
   text-decoration: underline;
 }
 
-.titleRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
+.empty {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.empty a {
+  color: var(--accent);
 }
 
 .title {
-  margin: 0;
+  margin: 0 0 var(--space-3);
   font-size: 1.5rem;
+}
+
+/* Folder tabs: two halves sitting on top of the panel; bottoms aligned so the
+   active tab (taller + accent) rises above the inactive one, like a file tab. */
+.tabs {
+  display: flex;
+  align-items: flex-end;
+  margin: 0;
+}
+
+.tab {
+  flex: 1;
+  appearance: none;
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  background: var(--line);
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius) var(--radius) 0 0;
+  cursor: pointer;
+}
+
+
+
+.tab:focus-visible {
+  outline: 0.1875rem solid var(--accent-soft);
+  outline-offset: -0.1875rem;
+}
+
+/* Active: taller (raised) and filled with the accent. */
+.tabActive {
+  padding-top: var(--space-4);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* The folder body the tabs attach to. */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: var(--space-2) var(--space-5);
+  box-shadow: var(--shadow-card);
 }
 
 .intro {
@@ -34,13 +81,15 @@
   line-height: 1.55;
 }
 
+/* Flat sections inside the folder panel, divided by a rule (no per-card chrome). */
 .family {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4) var(--space-5);
-  margin-bottom: var(--space-4);
-  box-shadow: var(--shadow-card);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--line);
+}
+
+.family:first-child {
+  padding-top: var(--space-3);
+  border-top: none;
 }
 
 .familyName {
@@ -54,67 +103,14 @@
   color: var(--muted);
 }
 
-.proteins {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.protein {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.25rem var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--line);
-}
-
-.proteinName {
-  font-weight: 600;
-  font-size: 0.9375rem;
-}
-
-.badges {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: start;
-}
-
-.kind,
-.strength {
-  display: inline-block;
-  padding: 0.05rem 0.45rem;
-  border-radius: 999px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.kind {
-  background: var(--accent-soft);
-  color: var(--accent);
-}
-
-.strength[data-strength="strong"] {
-  background: var(--sev-5);
-  color: var(--accent-ink);
-}
-.strength[data-strength="moderate"] {
-  background: var(--sev-3);
-  color: var(--ink);
-}
-.strength[data-strength="weak"] {
-  background: var(--line);
-  color: var(--muted);
-}
-
-.carriers {
-  grid-column: 1 / -1;
-  font-size: 0.8125rem;
-  color: var(--muted);
+/* The term definitions, set off in a card above the per-family tables. */
+.terms {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+  box-shadow: var(--shadow-card);
 }
 
 .source {
