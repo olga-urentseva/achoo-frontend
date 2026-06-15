@@ -20,7 +20,7 @@ export interface DisplayGroup {
   label: string;
 }
 
-/** An aggregation family — id → label, for "Results mathing the plants you picked in (city) <family>". */
+/** An aggregation family — id → label, for "Results matching the plants you picked in (city) <family>". */
 export interface Family {
   id: string;
   label: string;

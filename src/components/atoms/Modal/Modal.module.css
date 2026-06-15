@@ -1,0 +1,42 @@
+.dialog {
+  width: min(50rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 4rem);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow-pop);
+}
+
+.dialog::backdrop {
+  background: oklch(0.2 0 0 / 0.45);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 4rem);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+/* Scrolls when the explanation is taller than the viewport. */
+.content {
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  overflow-y: auto;
+}

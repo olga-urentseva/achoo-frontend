@@ -1,7 +1,10 @@
-import { use } from "react";
+import { use, useState } from "react";
 import { Link } from "react-router-dom";
 import getMeta from "../../../api/getMeta";
 import getCrossReactivity from "../../../api/getCrossReactivity";
+import { Modal } from "../../atoms/Modal/Modal";
+import { IconButton } from "../../atoms/IconButton/IconButton";
+import { SeverityExplanation } from "../../organisms/SeverityExplanation/SeverityExplanation";
 import styles from "./AllergensPage.module.css";
 
 /** Botanical family id → display name (e.g. `fagales` → `Fagales`). */
@@ -19,6 +22,9 @@ export function AllergensPage() {
   const meta = use(getMeta());
   const groups = use(getCrossReactivity());
 
+  // The "how does the app work / what am I reacting to" explainer modal.
+  const [explainOpen, setExplainOpen] = useState(false);
+
   const nameById = new Map(meta.plants.map((p) => [p.id, p.name]));
   // Real families only (the `unknown` bucket has no plants).
   const families = meta.families.filter((f) =>
@@ -30,7 +36,24 @@ export function AllergensPage() {
       <Link to="/" className={styles.back}>
         ← Back
       </Link>
-      <h2 className={styles.title}>Allergen families</h2>
+      <div className={styles.titleRow}>
+        <h2 className={styles.title}>Allergen families</h2>
+        <IconButton
+          aria-label="How severity is calculated and what you react to"
+          onClick={() => setExplainOpen(true)}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+            <path
+              d="M12 11v5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <circle cx="12" cy="7.5" r="1.15" fill="currentColor" />
+          </svg>
+        </IconButton>
+      </div>
       <p className={styles.intro}>
         Plants are grouped into <strong>families</strong> that share major
         allergenic <strong>proteins</strong>. React to one plant in a family and
@@ -95,6 +118,14 @@ export function AllergensPage() {
         </a>{" "}
         — the EAACI Molecular Allergology User’s Guide.
       </footer>
+
+      <Modal
+        open={explainOpen}
+        onClose={() => setExplainOpen(false)}
+        title="How this works"
+      >
+        {explainOpen && <SeverityExplanation />}
+      </Modal>
     </article>
   );
 }
