@@ -81,6 +81,12 @@
   line-height: 1.55;
 }
 
+/* Lead-in above the "My allergens" sections. */
+.mineIntro {
+  font-size: 1rem;
+  color: var(--accent);
+}
+
 /* A category section inside the folder panel (Plants / Food / Animals / Other). */
 .group {
   margin-bottom: var(--space-6);

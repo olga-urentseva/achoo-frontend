@@ -36,13 +36,29 @@ const CATEGORY_SECTIONS: {
  */
 export function AllergensPage() {
   const meta = use(getMeta());
-  const groups = use(
-    getCrossReactivity(["plant", "food", "animal", "other"]),
-  );
+  const groups = use(getCrossReactivity(["plant", "food", "animal", "other"]));
 
   const [view, setView] = useState<"all" | "mine">("all");
   const mine = view === "mine";
   const picked = new Set(loadPlants());
+
+  // The labels exactly as the home page shows them: display-group members
+  // collapse to the group's friendly label (e.g. the eight grasses → "Grasses").
+  const seenGroup = new Set<string>();
+  const groupLabels: string[] = [];
+  const looseLabels: string[] = [];
+  for (const p of meta.plants) {
+    if (!picked.has(p.id)) continue;
+    if (p.displayGroup) {
+      if (seenGroup.has(p.displayGroup)) continue;
+      seenGroup.add(p.displayGroup);
+      const g = meta.displayGroups.find((dg) => dg.id === p.displayGroup);
+      groupLabels.push(g?.label ?? p.displayGroup);
+    } else {
+      looseLabels.push(p.name);
+    }
+  }
+  const pickedLabels = [...groupLabels, ...looseLabels];
 
   // Roving tablist focus — Left/Right move and re-focus the active tab.
   const allTabRef = useRef<HTMLButtonElement>(null);
@@ -194,11 +210,17 @@ export function AllergensPage() {
         {noPicks ? (
           <p className={styles.empty}>
             You haven’t picked any plants yet. Choose the plants you react to on
-            the <Link to="/">home page</Link> and your allergens — plus the foods
-            and animals that cross-react with them — will show up here.
+            the <Link to="/">home page</Link> and your allergens — plus the
+            foods and animals that cross-react with them — will show up here.
           </p>
         ) : (
           <>
+            {mine && (
+              <p className={styles.mineIntro}>
+                Since you picked <strong>{pickedLabels.join(", ")}</strong> you
+                may react to these allergens:
+              </p>
+            )}
             <section className={styles.group}>
               <h3 className={styles.groupTitle}>Plants</h3>
               {shownFamilies.length > 0 ? (
