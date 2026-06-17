@@ -1,5 +1,4 @@
 import { Suspense, use } from "react";
-import getMeta from "../../../api/getMeta";
 import getCrossReactivity from "../../../api/getCrossReactivity";
 import { loadPlants } from "../../../lib/plantProfile";
 import { ErrorBoundary } from "../../templates/ErrorBoundary/ErrorBoundary";
@@ -26,15 +25,14 @@ const SEVERITY_LEGEND = [
  * made (community average, 1–6 scale), then "your" proteins.
  */
 function Body() {
-  const meta = use(getMeta());
-  const groups = use(getCrossReactivity());
+  // Plants only — this explains the proteins behind the user's pollen picks.
+  const groups = use(getCrossReactivity(["plant"]));
 
   // The plants the user said they react to (local-only), and the proteins those
   // plants carry — strongest first, same ordering as the Allergens reference.
   const picked = new Set(loadPlants());
-  const nameById = new Map(meta.plants.map((p) => [p.id, p.name]));
   const proteins = groups
-    .filter((g) => g.plants.some((id) => picked.has(id)))
+    .filter((g) => g.sources.some((s) => picked.has(s.id)))
     .sort((a, b) => STRENGTH_ORDER[a.strength] - STRENGTH_ORDER[b.strength]);
 
   return (
@@ -59,9 +57,9 @@ function Body() {
                 name: g.name,
                 kind: g.kind,
                 strength: g.strength,
-                carriers: g.plants
-                  .filter((id) => picked.has(id))
-                  .map((id) => nameById.get(id) ?? id)
+                carriers: g.sources
+                  .filter((s) => picked.has(s.id))
+                  .map((s) => s.name)
                   .join(", "),
               }))}
             />

@@ -34,14 +34,25 @@ export interface Meta {
   colors: string[];
 }
 
-/** One shared-protein group from `GET /meta/cross-reactivity`. Plants carrying
+/** Allergen categories the cross-reactivity endpoint can return. `plant` comes
+ * from the plants list; `food`/`animal`/`other` from the allergens list. */
+export type AllergenCategory = "plant" | "food" | "animal" | "other";
+
+/** One allergen source in a cross-reactivity group, tagged with its category. */
+export interface CrossReactivitySource {
+  id: string;
+  name: string;
+  category: AllergenCategory;
+}
+
+/** One shared-protein group from `GET /meta/cross-reactivity`. Sources carrying
  * the same protein tend to cross-react; panallergens are broad, usually weak. */
 export interface CrossReactivityGroup {
   protein: string;
   name: string;
   kind: "major" | "panallergen";
   strength: "strong" | "moderate" | "weak";
-  plants: string[];
+  sources: CrossReactivitySource[];
 }
 
 export interface PlaceRegion {
