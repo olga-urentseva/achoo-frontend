@@ -159,8 +159,10 @@ export function AllergensPage() {
         Allergen sources are linked by the <strong>proteins</strong> they share.
         React to one source carrying a protein and you often react to the others
         that share it — that’s <strong>cross-reactivity</strong>. Panallergens
-        are broad, usually weaker links. This is general information,{" "}
-        <strong>not medical advice</strong>.
+        are broad, usually weaker links.
+      </p>
+      <p className={styles.alert}>
+        This is general information, <strong>not medical advice</strong>.
       </p>
 
       <section className={styles.terms}>

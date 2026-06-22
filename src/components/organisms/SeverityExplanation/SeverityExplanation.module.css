@@ -17,7 +17,7 @@
 .disclaimer {
   margin: 0;
   font-size: 0.8125rem;
-  color: var(--accent);
+  color: var(--alert);
   line-height: 1.5;
   font-size: 1rem;
 }
