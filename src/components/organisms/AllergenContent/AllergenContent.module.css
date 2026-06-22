@@ -1,0 +1,53 @@
+.empty {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.empty a {
+  color: var(--accent);
+}
+
+/* Lead-in above the "My allergens" sections. */
+.mineIntro {
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+/* A category section inside the folder panel (Plants / Food / Animals / Other). */
+.group {
+  margin-bottom: var(--space-6);
+}
+
+.group:last-child {
+  margin-bottom: 0;
+}
+
+.groupTitle {
+  margin: 0 0 var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--line);
+  font-size: 1.25rem;
+}
+
+/* Flat plant-family blocks within the Plants group, divided by a rule. */
+.family {
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--line);
+}
+
+.family:first-of-type {
+  padding-top: 0;
+  border-top: none;
+}
+
+.familyName {
+  margin: 0 0 var(--space-1);
+  font-size: 1.125rem;
+}
+
+.plants {
+  margin: 0 0 var(--space-3);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
